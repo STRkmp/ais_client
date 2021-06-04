@@ -13,7 +13,7 @@ namespace ais_client
         public DateTime Date { get; set; }
         public int Student_id { get; set; }
         public int Stock_id { get; set; }
-        public int Stock_Price { get; set; }
+        public double Stock_Price { get; set; }
         public int Quantity { get; set; }
         public string Function { get; set; }
         public string Type { get; set; }

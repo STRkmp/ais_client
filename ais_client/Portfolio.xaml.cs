@@ -27,45 +27,34 @@ namespace ais_client
    
     public partial class Portfolio : Page
     {
-        static public RestClient client = new RestClient(new Uri("https://ais-rest.conveyor.cloud"));
-        static RestRequest restrequest;
-        static string stocksrequest = "/Students/GetStocks/23";
-        private ObservableCollection<User_stock> stocks_list;   // Определить класс 
-
-        public Portfolio()
+        private ObservableCollection<User_stock> stocks_list;
+        private System.Windows.Threading.DispatcherTimer timer;
+        RestClient client = new RestClient(new Uri("https://ais-rest.conveyor.cloud"));
+        string stocksrequest = "/Students/GetStocks/";
+        string studentID;
+        public Portfolio(string studentID)
         {
+            this.studentID = studentID;
             InitializeComponent();
-            //  this.Loaded += PortfolioLoaded;
-            load();
-            StocksList.ItemsSource = stocks_list;
+            startTime();
         }
-
-        //private async void PortfolioLoaded(object sender, RoutedEventArgs e)
-        //{
-        //    await load();
-        //}
-        //private async Task load()
-        //{
-        //    var cancellationTokenSource = new CancellationTokenSource();
-        //    restrequest = new RestRequest(stocksrequest, Method.GET);
-        //    var restresponse = await client.ExecuteTaskAsync(restrequest, cancellationTokenSource.Token);
-        //    stocks_list = JsonConvert.DeserializeObject<ObservableCollection<User_stock>>(restresponse.Content);
-        //    client.Execute(restrequest, Method.GET);
-        //}
+        private void startTime()
+        {
+            timer = new System.Windows.Threading.DispatcherTimer();
+            timer.Tick += new EventHandler(loadAsync);
+            timer.Interval = TimeSpan.FromSeconds(3);
+            timer.Start();
+        }
+        private async void loadAsync(object sender, EventArgs e)
+        {
+            await Task.Run(() => load());
+        }
         private void load()
         {
-            restrequest = new RestRequest(stocksrequest, Method.GET);
-            var restresponse = client.Execute(restrequest, Method.GET);
+            var restrequest = new RestRequest("/Students/GetStocks/"+studentID, Method.GET);
+            var restresponse = client.Execute(restrequest);
             stocks_list = JsonConvert.DeserializeObject<ObservableCollection<User_stock>>(restresponse.Content);
+            System.Windows.Application.Current.Dispatcher.Invoke((ThreadStart)delegate { StocksList.ItemsSource = stocks_list; });
         }
-        //private static async void load()
-        //{
-        //    var cancellationTokenSource = new CancellationTokenSource();
-        //    var restrequest = new RestRequest(stocksrequest, Method.GET);
-        //    var restresponse = await client.ExecuteTaskAsync(restrequest,cancellationTokenSource.Token);
-
-        //    Student_Current = JsonConvert.DeserializeObject<student>(restresponse.Content);
-        //   // Student_Current = JsonConvert.DeserializeObject<student>(restresponse.Content);
-        //}
     }
 }

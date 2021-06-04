@@ -25,48 +25,42 @@ namespace ais_client
     /// </summary>
     public partial class MainWindow : Window
     {
-        static student Student_Current;
-
-        public static ObservableCollection<MyOrder> orders_user;
+        student Student_Current;
+        string studentID = "23";
+        RestClient client = new RestClient(new Uri("https://ais-rest.conveyor.cloud"));
+        private System.Windows.Threading.DispatcherTimer timer;
         public MainWindow()
         {
             InitializeComponent();
-            load();
-            listview_fio_balance.DataContext = Student_Current;
+            
+            MainFrame.Content = new Auth(this);
+          
         }
         private void List_navigation_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ListViewItem cur = (ListViewItem)List_navigation.SelectedItem;
-            MainFrame.Content = SinglPage.getInstance(cur.Name);
+            MainFrame.Content = SinglPage.getInstance(((ListViewItem)List_navigation.SelectedItem).Name, studentID);
         }
-
-        private static async void load()
+        public void startTime(string id)
         {
-              RestClient client = new RestClient(new Uri("https://ais-rest.conveyor.cloud"));
-            string stocksrequest = "/Students/details/23";
-            var cancellationTokenSource = new CancellationTokenSource();
-            var restrequest = new RestRequest(stocksrequest, Method.GET);
-            var restresponse = await client.ExecuteTaskAsync(restrequest, cancellationTokenSource.Token);
-
-            Student_Current = JsonConvert.DeserializeObject<student>(restresponse.Content);
-            
-            
-         ;
+            this.studentID = id;
+            MainFrame.Content = null;
+            ButtonOpen.IsEnabled = true;
+            timer = new System.Windows.Threading.DispatcherTimer();
+            timer.Tick += new EventHandler(loadAsync);
+            timer.Interval = TimeSpan.FromSeconds(3);
+            timer.Start();
         }
-        private void btn_test_Click(object sender, RoutedEventArgs e)
+        private async void loadAsync(object sender, EventArgs e)
         {
-            RestClient client = new RestClient(new Uri("https://ais-rest.conveyor.cloud"));
-
-            User_stock order = new User_stock() { Stock_ID = 0, Name = "PAFMMMM", Price = 4, Count = 463 };
-            JObject jo = (JObject)JToken.FromObject(order);
-            var restrequest = new RestRequest("/Stocks/Create", Method.POST);
-            restrequest.AddParameter("application/json", jo, ParameterType.RequestBody);
-            restrequest.RequestFormat = RestSharp.DataFormat.Json;
+            await Task.Run(() => load());
+        }
+        private void load()
+        {     
+            var restrequest = new RestRequest("/Students/details/" + studentID, Method.GET);
             var restresponse = client.Execute(restrequest);
-
-
-            
-            // Student_Current = JsonConvert.DeserializeObject<student>(restresponse.Content);
+            Student_Current = JsonConvert.DeserializeObject<student>(restresponse.Content);
+            System.Windows.Application.Current.Dispatcher.Invoke((ThreadStart)delegate { txt_balance.Text = Student_Current.Currency.ToString(); 
+                                                                                   txt_fio.Text = Student_Current.Im +' '+ Student_Current.Fam + ' ' + Student_Current.Otch; });
         }
     }
 }

@@ -11,7 +11,7 @@ namespace ais_client
     class SinglPage
     {
         private static List<(string,Page)> instance = new List<(string,Page)>();
-        public static Page getInstance(string name)
+        public static Page getInstance(string name, string id)
         {
             (string, Page) Page = instance.Find(x => x.Item1.Equals(name));
             if (Page.Item2 == null)
@@ -19,12 +19,13 @@ namespace ais_client
                 Type current = Type.GetType("ais_client."+ name);
                 if ( current != null)
                 {
-                    Page = (name, (Page)Activator.CreateInstance(current));
+                    Page = (name, (Page)Activator.CreateInstance(current,id));
                 }
                 
                 instance.Add(Page);
                   
             }
+
             return Page.Item2;
         }
     }

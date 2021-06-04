@@ -7,20 +7,17 @@
       xmlns:local="clr-namespace:ais_client"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
+      DataContext="{Binding RelativeSource={RelativeSource Self}}"
       Title="Stocks">
     <Grid>
         <DockPanel LastChildFill="True" >
-            <ListView Name="List_stocks" Width="130" DockPanel.Dock="Left" Foreground="#FF313131" FontFamily="Champagne &amp; Limousines" FontSize="13">
-                <ListViewItem Height="45" Padding="0">
-                    <StackPanel Orientation="Horizontal" Margin="10 0" >
-                        <TextBlock Text="Stock_name" Margin="10"/>
-                    </StackPanel>
-                </ListViewItem>
-                <ListViewItem Height="45" Padding="0">
-                    <StackPanel Orientation="Horizontal" Margin="10 0" >
-                        <TextBlock Text="stock_name2" Margin="10"/>
-                    </StackPanel>
-                </ListViewItem>
+            <ListView Name="List_stocks" Width="130" DockPanel.Dock="Left" Foreground="#FF313131" FontFamily="Champagne &amp; Limousines" FontSize="13" ItemsSource="{Binding ALLStocks_list}">
+                <ListView.View>
+                    <GridView x:Name="list_grid_AllStocks">
+                        <!--<GridViewColumn DisplayMemberBinding="{Binding Path = Stock_ID}">ID акции</GridViewColumn>-->
+                        <GridViewColumn DisplayMemberBinding="{Binding Path = Name}">Имя акции</GridViewColumn>
+                    </GridView>
+                </ListView.View>
             </ListView>
             <Grid>
                 <Grid.RowDefinitions>
@@ -33,16 +30,30 @@
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <MediaElement Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="2"></MediaElement>
-                <Grid Grid.Row="3" Grid.ColumnSpan="2">
-                    <StackPanel Name="panel_radio">
-                        <RadioButton GroupName="Order_type" Content="Лимит" IsChecked="True"/>
-                        <RadioButton GroupName="Order_type" Content="Маркет"/>
-                        <ComboBox Text="Loh" Width="120" materialDesign:HintAssist.Hint="Search" materialDesign:HintAssist.HintOpacity=".26" HorizontalAlignment="Left" >
-                            <ComboBoxItem Content="Покупка"/>
-                            <ComboBoxItem Content="Продажа"/>
-                        </ComboBox>
-                    </StackPanel>
+                <TextBlock Name="txt_price" Grid.Row ="0" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="3"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Grid Grid.Row="3" Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <ComboBox Name="txt_type" Grid.Row="0"  HorizontalAlignment="Left" Width="120" materialDesign:HintAssist.Hint="Search" materialDesign:HintAssist.HintOpacity=".26" SelectionChanged="txt_type_SelectionChanged"  >
+                        <ComboBoxItem Content="limit"/>
+                        <ComboBoxItem Content="market"/>
+                    </ComboBox>
+                    <ComboBox Name="txt_function" Grid.Row="1"  HorizontalAlignment="Left" Width="120" materialDesign:HintAssist.Hint="Search" materialDesign:HintAssist.HintOpacity=".26"  >
+                        <ComboBoxItem Content="buy"/>
+                        <ComboBoxItem Content="sell"/>
+                    </ComboBox>
+                    <TextBox Name="txt_count" Grid.Row="2"  materialDesign:HintAssist.Hint="Count (int)" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  />
+                    <TextBox Name="txt_user_price" Grid.Row="3" materialDesign:HintAssist.Hint="Price" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  />
+                    <Button Grid.Row="4" HorizontalAlignment="Left"
+                            Click= "Button_Click"
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            ToolTip="MaterialDesignFlatButton"
+                            Content="Place order"/>
                 </Grid>
             </Grid>
         </DockPanel>

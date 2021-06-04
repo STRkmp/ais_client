@@ -10,7 +10,7 @@ namespace ais_client
    public class student
     {
         public int Student_ID { get; set; }
-        public int Currency { get; set; }
+        public double Currency { get; set; }
         public int group_id { get; set; }
         public string Fam { get; set; }
         public string Im { get; set; }

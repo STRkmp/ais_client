@@ -14,9 +14,9 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="Auto" Header="Название" DisplayMemberBinding="{Binding Path = Name}"/>
-                    <GridViewColumn Width="Auto" Header="Количество" DisplayMemberBinding="{Binding Path = Count}"/>
+                    <!--<GridViewColumn Width="Auto" Header="Количество" DisplayMemberBinding="{Binding Path = Count}"/>-->
                     <GridViewColumn Width="Auto" Header="Цена" DisplayMemberBinding="{Binding Path = Price}"/>
-                        <!--<GridViewColumn DisplayMemberBinding="{Binding Path = Total}">Сумма</GridViewColumn>-->
+                    <!--<GridViewColumn DisplayMemberBinding="{Binding Path = Total}">Сумма</GridViewColumn>-->
                 </GridView>
             </ListView.View>
             

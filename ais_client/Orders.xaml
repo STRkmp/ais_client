@@ -6,7 +6,7 @@
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:local="clr-namespace:ais_client"
       mc:Ignorable="d" 
-      DataContext="{Binding RelativeSource={RelativeSource Self}}"
+
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Orders">
     <Grid>
@@ -15,8 +15,25 @@
             <ColumnDefinition Width="7*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <ListView Name ="ListView_Order" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Column="0" ItemsSource="{Binding MyOrders}">
-            <ListView.Style>
+        <ListView Name ="ListView_Order" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Column="0" ItemsSource="{Binding myorders}">
+            <ListView.View >
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path = Date}">Дата</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path = Stock.Name}">Акция</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path = Function}">Тип операции</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path = Type}">Тип ордера</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path = Quantity}">Количество</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path = Stock_Price}">Цена акции</GridViewColumn>
+                    <GridViewColumn Header="Cancel">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Click="Button_Click">Delete</Button>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+            <!--<ListView.Style>
                 <Style TargetType="ListView">
                     <Setter Property="Visibility" Value="Visible"/>
                     <Setter Property="Width" Value="Auto" />
@@ -27,22 +44,10 @@
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </ListView.Style>
-            <ListView.View>
-                <GridView >
-                    <GridViewColumn DisplayMemberBinding="{Binding Path = Date}">Дата</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path = Stock_id}">Акция</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path = Function}">Тип ордера</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path = Type}">Тип операции</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path = Quantity}">Количество</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path = Stock_Price}">Цена акции</GridViewColumn>
-                    <!--<GridViewColumn DisplayMemberBinding="{Binding Path = Total}">Сумма операции</GridViewColumn>-->
-
-                </GridView>
-            </ListView.View>
+            </ListView.Style>-->
         </ListView>
-        <ListView Name ="ListView_History" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Column="0" >
-            <ListView.Style>
+        <ListView Name ="ListView_History" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Column="0" ItemsSource="{Binding MyHistory}" Visibility="Collapsed"  >
+            <!--<ListView.Style>
                 <Style TargetType="ListView">
                     <Setter Property="Visibility" Value="Collapsed"/>
                     <Setter Property="Width" Value="Auto" />
@@ -53,24 +58,21 @@
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </ListView.Style>
+            </ListView.Style>-->
             <ListView.View>
                 <GridView>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path = Date}">Дата создания</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path = Date}">Дата сделки</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path = Name}">Акция</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path = Type_order}">Тип ордера</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path = Type_operation}">Тип операции</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path = Count}">Количество</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path = Price}">Цена акции</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path = Total}">Сумма операции</GridViewColumn>
-
+                    <GridViewColumn DisplayMemberBinding="{Binding Path = Order_ID}">ID</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path = Date}">Дата</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path = Stock.Name}">Акция</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path = Function}">Тип операции</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path = Type}">Тип ордера</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path = Quantity}">Количество</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path = Stock_Price}">Цена акции</GridViewColumn>
                 </GridView>
             </ListView.View>
-
         </ListView>
 
-        <ToggleButton Name="toggle_list" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top"
+        <ToggleButton Name="toggle_list" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top" IsChecked="False" Checked="toggle_list_Checked" Unchecked="toggle_list_Unchecked"
             Style="{StaticResource MaterialDesignSwitchToggleButton}"  ToolTip="MaterialDesignSwitchToggleButton with Content and ToggleButtonAssist.OnContent" Margin="19,10,17,0">
             <materialDesign:ToggleButtonAssist.SwitchTrackOnBackground>
                 <SolidColorBrush
