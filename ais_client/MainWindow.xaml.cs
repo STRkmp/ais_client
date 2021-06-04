@@ -26,19 +26,21 @@ namespace ais_client
     public partial class MainWindow : Window
     {
         student Student_Current;
-        string studentID = "23";
-        RestClient client = new RestClient(new Uri("https://ais-rest.conveyor.cloud"));
+        string studentID;
+        string Uri = "";
+        RestClient client;
         private System.Windows.Threading.DispatcherTimer timer;
         public MainWindow()
         {
+            Uri = "https://ais-rest.conveyor.cloud";
             InitializeComponent();
-            
-            MainFrame.Content = new Auth(this);
+            client = new RestClient(new Uri(Uri));
+            MainFrame.Content = new Auth(this, Uri);
           
         }
         private void List_navigation_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            MainFrame.Content = SinglPage.getInstance(((ListViewItem)List_navigation.SelectedItem).Name, studentID);
+            MainFrame.Content = SinglPage.getInstance(((ListViewItem)List_navigation.SelectedItem).Name, studentID, Uri);
         }
         public void startTime(string id)
         {
@@ -47,7 +49,7 @@ namespace ais_client
             ButtonOpen.IsEnabled = true;
             timer = new System.Windows.Threading.DispatcherTimer();
             timer.Tick += new EventHandler(loadAsync);
-            timer.Interval = TimeSpan.FromSeconds(3);
+            timer.Interval = TimeSpan.FromSeconds(1);
             timer.Start();
         }
         private async void loadAsync(object sender, EventArgs e)

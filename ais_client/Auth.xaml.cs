@@ -24,11 +24,12 @@ namespace ais_client
     public partial class Auth : Page
     {
         MainWindow window;
-        RestClient client = new RestClient(new Uri("https://ais-rest.conveyor.cloud"));
-        public Auth(MainWindow window)
+        RestClient client;
+        public Auth(MainWindow window, string Uri)
         {
             InitializeComponent();
             this.window = window;
+            client = new RestClient(new Uri(Uri));
         }
         public void Auth_click(object sender, RoutedEventArgs e)
         {

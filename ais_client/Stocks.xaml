@@ -50,7 +50,7 @@
                     <TextBox Name="txt_count" Grid.Row="2"  materialDesign:HintAssist.Hint="Count (int)" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  />
                     <TextBox Name="txt_user_price" Grid.Row="3" materialDesign:HintAssist.Hint="Price" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  />
                     <Button Grid.Row="4" HorizontalAlignment="Left"
-                            Click= "Button_Click"
+                            Click="sendOrder"
                             Style="{StaticResource MaterialDesignFlatButton}"
                             ToolTip="MaterialDesignFlatButton"
                             Content="Place order"/>

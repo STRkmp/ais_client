@@ -28,10 +28,11 @@ namespace ais_client
         private ObservableCollection<MyOrder> MyHistory;
         private System.Windows.Threading.DispatcherTimer timer;
         string studentID;
-        RestClient client = new RestClient(new Uri("https://ais-rest.conveyor.cloud"));
+        RestClient client;
         string stocksrequest = "/Students/details/";
-        public Orders(string studentID)
+        public Orders(string studentID, string Uri)
         {
+            client = new RestClient(new Uri(Uri));
             this.studentID = studentID;
             stocksrequest += studentID;
             InitializeComponent();
@@ -41,7 +42,7 @@ namespace ais_client
         {
             timer = new System.Windows.Threading.DispatcherTimer();
             timer.Tick += new EventHandler(loadAsync);
-            timer.Interval = TimeSpan.FromSeconds(3);
+            timer.Interval = TimeSpan.FromSeconds(1);
             timer.Start();
         }
         private async void loadAsync(object sender, EventArgs e)

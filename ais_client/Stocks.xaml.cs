@@ -26,16 +26,15 @@ namespace ais_client
     /// </summary>
     public partial class Stocks : Page
     {
-        RestClient client = new RestClient(new Uri("https://ais-rest.conveyor.cloud"));
+        RestClient client;
         private ObservableCollection<User_stock> ALLStocks_list = new ObservableCollection<User_stock>();
         private ObservableCollection<User_stock> stocks_prices = new ObservableCollection<User_stock>();
-        student Student_Current;
         string studentID;                   
         private System.Windows.Threading.DispatcherTimer timer;
-        public Stocks(string studentID)
+        public Stocks(string studentID, string Uri)
         {
             this.studentID = studentID;
-            
+            client = new RestClient(new Uri(Uri));
             InitializeComponent();
             List_stocks.ItemsSource = ALLStocks_list;
             startTime();
@@ -44,7 +43,7 @@ namespace ais_client
         {
             timer = new System.Windows.Threading.DispatcherTimer();
             timer.Tick += new EventHandler(loadAsync);
-            timer.Interval = TimeSpan.FromSeconds(2);
+            timer.Interval = TimeSpan.FromSeconds(1);
             timer.Start();
         }
         private async void loadAsync(object sender, EventArgs e)
@@ -58,7 +57,6 @@ namespace ais_client
             stocks_prices = JsonConvert.DeserializeObject<ObservableCollection<User_stock>>(restresponse.Content);
             restrequest = new RestRequest("/Students/details/" + studentID, Method.GET);
             restresponse = client.Execute(restrequest);
-            Student_Current = JsonConvert.DeserializeObject<student>(restresponse.Content);
             System.Windows.Application.Current.Dispatcher.Invoke((ThreadStart)delegate {
                 if (ALLStocks_list.Count == 0)
                 {
@@ -81,18 +79,22 @@ namespace ais_client
             if ( Convert.ToInt32(count) < 1) return false;
             return true;
         }
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void send(string type, string function, string user_price, string count, int stock_id )
         {
-            if (CheckText(txt_type.Text,txt_function.Text,txt_user_price.Text,txt_count.Text))
+            if (CheckText(type,function,user_price,count))
             {
                 double price;
-                MyOrder order = new MyOrder() { Date = DateTime.Now, Type = txt_type.Text, Function = txt_function.Text, Student_id = Int32.Parse(studentID), Quantity = Int32.Parse(txt_count.Text), Stock_Price = Double.TryParse(txt_user_price.Text, out price) ? price : 0, Stock_id = ((User_stock)List_stocks.SelectedItem).Stock_ID };
+                MyOrder order = new MyOrder() { Date = DateTime.Now, Type = type, Function = function, Student_id = Int32.Parse(studentID), Quantity = Int32.Parse(count), Stock_Price = Double.TryParse(user_price, out price) ? price : 0, Stock_id = stock_id };
                 JObject jo = (JObject)JToken.FromObject(order);
                 var restrequest = new RestRequest("/MyOrder/Create", Method.POST);
                 restrequest.AddParameter("application/json", jo, ParameterType.RequestBody);
                 restrequest.RequestFormat = RestSharp.DataFormat.Json;
                 var restresponse = client.Execute(restrequest);
             }
+        }
+        private async void sendOrder(object sender, RoutedEventArgs e)
+        {   if (List_stocks.SelectedItem != null)
+            await Task.Run(()=>send(txt_type.Text,txt_function.Text,txt_user_price.Text,txt_count.Text, ((User_stock)List_stocks.SelectedItem).Stock_ID));
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e) => e.Handled = Regex.IsMatch(e.Text, "[^0-9]+");
