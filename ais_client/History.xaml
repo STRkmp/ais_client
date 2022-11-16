@@ -1,0 +1,34 @@
+﻿<Page x:Class="ais_client.History"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ais_client"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="History">
+    <Page.Resources>
+        <Style TargetType="ListView">
+            <Setter Property="Width" Value="Auto" />
+            <Setter Property="FontSize" Value="10"/>
+        </Style>
+    </Page.Resources>
+    <Grid>
+        <ListView Name ="ListView_History" VerticalAlignment="Top" HorizontalAlignment="Left" >
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path = Date}">Дата создания</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path = Date}">Дата сделки</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path = Name}">Акция</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path = Type_order}">Тип ордера</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path = Type_operation}">Тип операции</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path = Count}">Количество</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path = Price}">Цена акции</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path = Total}">Сумма операции</GridViewColumn>
+                    
+                </GridView>
+            </ListView.View>
+
+        </ListView>
+    </Grid>
+</Page>

@@ -1,0 +1,23 @@
+﻿<Page x:Class="ais_client.Portfolio"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ais_client"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      DataContext="{Binding RelativeSource={RelativeSource Self}}"
+      Title="Portfolio">
+      
+    <Grid>
+        <ListView Name ="StocksList" VerticalAlignment="Top" HorizontalAlignment="Left" ItemsSource="{Binding stocks_list}" >
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="Auto" Header="Название" DisplayMemberBinding="{Binding Path = Name}"/>
+                    <GridViewColumn Width="Auto" Header="Цена" DisplayMemberBinding="{Binding Path = Price}"/>
+                </GridView>
+            </ListView.View>
+            
+        </ListView>
+    </Grid>
+</Page>
